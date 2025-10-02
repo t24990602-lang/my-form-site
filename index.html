@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="ru">
+<html lang="uz">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Регистрация / Ro'yxatdan o'tish</title>
+  <title data-i18n="pageTitle">Ro'yxatdan o'tish / Регистрация</title>
   <style>
     :root{
       --bg:#f8fafc; --card:#ffffff; --text:#0f172a; --muted:#64748b;
@@ -11,25 +11,28 @@
       --radius:14px; --shadow:0 8px 30px rgba(2,6,23,.06);
     }
     body{
-      margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
       color:var(--text); background:linear-gradient(180deg,#f6faff,#eef2ff);
-      min-height:100vh; display:flex; align-items:center; justify-content:center;
-      padding:32px;
+      min-height:100vh; display:flex; align-items:flex-start; justify-content:center;
+      padding:36px 16px;
     }
     .wrap{width:100%; max-width:720px}
+    .topbar{display:flex; justify-content:space-between; align-items:center; gap:12px}
     .title{font-size:28px; font-weight:800; margin:0 0 6px}
     .subtitle{color:var(--muted); margin:0 0 18px}
-    .card{
-      background:var(--card); border:1px solid var(--border);
-      border-radius:var(--radius); box-shadow:var(--shadow);
-      padding:22px 20px;
+    .lang{display:flex; gap:8px}
+    .lang button{
+      border:1px solid var(--border); background:#fff; color:#0f172a;
+      padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700;
     }
+    .lang button.active{background:var(--accent); color:#fff; border-color:transparent}
+    .card{background:var(--card); border:1px solid var(--border);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:22px 20px;}
     label{display:block; font-weight:700; margin:14px 4px 8px}
     input[type=text],input[type=tel]{
-      width:100%; font-size:16px; padding:12px 14px;
+      width:100%; font-size:16px; padding:12px 14px; box-sizing:border-box;
       border:1px solid var(--border); border-radius:10px; background:#fff;
-      box-sizing:border-box;
     }
     input:focus{border-color:#93c5fd; box-shadow:0 0 0 4px rgba(147,197,253,.35); outline:none}
     .row{display:flex; gap:12px}
@@ -37,54 +40,132 @@
     .consent{display:flex; align-items:flex-start; gap:10px; margin:12px 4px}
     .consent input{margin-top:3px}
     .actions{display:flex; justify-content:flex-end; margin-top:16px}
-    button{
+    button[type=submit]{
       background:var(--accent); color:#fff; border:0; border-radius:12px;
       padding:12px 18px; font-weight:800; cursor:pointer;
     }
-    button:hover{background:var(--accent-hover)}
+    button[type=submit]:hover{background:var(--accent-hover)}
     .footer-note{color:var(--muted); font-size:12px; margin-top:8px}
+    /* 成功画面 */
+    .success{display:none; text-align:center; margin-top:80px}
+    .success h2{font-size:24px; margin-bottom:12px}
+    .success a{color:#0ea371; font-weight:700; text-decoration:none}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <h1 class="title">Форма регистрации / Ro'yxatdan o'tish</h1>
-    <p class="subtitle">Пожалуйста, заполните форму / Iltimos, quyidagi ma’lumotlarni kiriting.</p>
+    <div class="topbar">
+      <div>
+        <h1 class="title" data-i18n="heading">Ro'yxatdan o'tish / Регистрация</h1>
+        <p class="subtitle" data-i18n="subheading">
+          Iltimos, quyidagi ma’lumotlarni kiriting. / Пожалуйста, заполните форму.
+        </p>
+      </div>
+      <div class="lang">
+        <button id="btn-uz" type="button">O‘zbek (UZ)</button>
+        <button id="btn-ru" type="button">Русский (RU)</button>
+      </div>
+    </div>
 
-    <form class="card" name="contact" method="POST" data-netlify="true"
-          netlify-honeypot="bot-field" action="/success.html">
+    <!-- Netlifyフォーム -->
+    <form class="card" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="contact" />
+      <input type="hidden" name="lang" id="langField" value="uz">
       <p style="display:none"><label>Don’t fill this out: <input name="bot-field" /></label></p>
 
-      <label>Ф.И.О. / To‘liq ism-familiyasi</label>
-      <input type="text" name="name" placeholder="Иван Иванов / Ali Valiyev" required>
+      <label data-i18n="nameLabel">To‘liq ism-familiyasi / Ф.И.О.</label>
+      <input type="text" name="name" data-ph="namePh" required>
 
       <div class="row">
         <div>
-          <label>Телефон / Telefon</label>
-          <input type="tel" name="phone" placeholder="+998 90 123 45 67" required>
+          <label data-i18n="phoneLabel">Telefon / Телефон</label>
+          <input type="tel" name="phone" data-ph="phonePh" required>
         </div>
         <div>
-          <label>Telegram (логин / login)</label>
-          <input type="text" name="telegram" placeholder="@username">
+          <label data-i18n="tgLabel">Telegram (login) / Телеграм (логин)</label>
+          <input type="text" name="telegram" data-ph="tgPh">
         </div>
       </div>
 
-      <label>Instagram (имя пользователя / foydalanuvchi nomi)</label>
-      <input type="text" name="instagram" placeholder="username">
+      <label data-i18n="igLabel">Instagram foydalanuvchi nomi / Имя пользователя Instagram</label>
+      <input type="text" name="instagram" data-ph="igPh">
 
       <label class="consent">
         <input type="checkbox" name="agree" required>
-        <span>Я согласен с политикой конфиденциальности / Maxfiylik siyosatiga roziman</span>
+        <span data-i18n="consent">Maxfiylik siyosatiga roziman / Я согласен с политикой конфиденциальности</span>
       </label>
 
       <div class="actions">
-        <button type="submit">Отправить / Yuborish</button>
+        <button type="submit" data-i18n="submit">Yuborish / Отправить</button>
       </div>
-      <div class="footer-note">
-        Мы используем данные только для связи по указанной цели. <br>
-        Ma’lumotlar faqat ko‘rsatilgan maqsad uchun ishlatiladi.
+      <div class="footer-note" data-i18n="note">
+        Ma’lumotlar faqat ko‘rsatilgan maqsad uchun ishlatiladi. /
+        Данные используются только для связи по указанной цели.
       </div>
     </form>
+
+    <!-- 成功画面 -->
+    <div class="success" id="successBox">
+      <h2 id="successTitle">Rahmat! / Спасибо!</h2>
+      <p id="successDesc">So'rovingiz yuborildi. / Ваша заявка отправлена.</p>
+      <p><a href="/" id="backLink">← Orqaga / Вернуться</a></p>
+    </div>
   </div>
+
+  <script>
+    const dict = {
+      uz:{pageTitle:"Ro'yxatdan o'tish / Регистрация",
+        heading:"Ro'yxatdan o'tish / Регистрация",
+        subheading:"Iltimos, quyidagi ma’lumotlarni kiriting. / Пожалуйста, заполните форму.",
+        nameLabel:"To‘liq ism-familiyasi / Ф.И.О.",phoneLabel:"Telefon / Телефон",
+        tgLabel:"Telegram (login) / Телеграм (логин)",
+        igLabel:"Instagram foydalanuvchi nomi / Имя пользователя Instagram",
+        consent:"Maxfiylik siyosatiga roziman / Я согласен с политикой конфиденциальности",
+        submit:"Yuborish / Отправить",
+        note:"Ma’lumotlar faqat ko‘rsatilgan maqsad uchun ishlatiladi. / Данные используются только для связи по указанной цели.",
+        namePh:"Ali Valiyev / Иван Иванов", phonePh:"+998 90 123 45 67", tgPh:"@username", igPh:"username",
+        successTitle:"Rahmat! / Спасибо!", successDesc:"So'rovingiz yuborildi. / Ваша заявка отправлена.",
+        back:"← Orqaga / Вернуться"},
+      ru:{pageTitle:"Регистрация / Ro'yxatdan o'tish",
+        heading:"Регистрация / Ro'yxatdan o'tish",
+        subheading:"Пожалуйста, заполните форму. / Iltimos, quyidagi ma’lumotlarni kiriting.",
+        nameLabel:"Ф.И.О. / To‘liq ism-familiyasi", phoneLabel:"Телефон / Telefon",
+        tgLabel:"Телеграм (логин) / Telegram (login)",
+        igLabel:"Имя пользователя Instagram / Instagram foydalanuvchi nomi",
+        consent:"Я согласен с политикой конфиденциальности / Maxfiylik siyosatiga roziman",
+        submit:"Отправить / Yuborish",
+        note:"Данные используются только для связи по указанной цели. / Ma’lumotlar faqat ko‘rsatilgan maqsad uchun ishlatiladi.",
+        namePh:"Иван Иванов / Ali Valiyev", phonePh:"+998 90 123 45 67", tgPh:"@username", igPh:"username",
+        successTitle:"Спасибо! / Rahmat!", successDesc:"Ваша заявка отправлена. / So'rovingiz yuborildi.",
+        back:"← Вернуться / Orqaga"}
+    };
+
+    const $ = (s)=>document.querySelector(s);
+    const allI18n=document.querySelectorAll("[data-i18n]");
+    const allPh=document.querySelectorAll("[data-ph]");
+    const btnUZ=$("#btn-uz"),btnRU=$("#btn-ru"),langField=$("#langField");
+
+    const saved=localStorage.getItem("lang")||"uz"; applyLang(saved);
+    btnUZ.onclick=()=>applyLang("uz"); btnRU.onclick=()=>applyLang("ru");
+
+    function applyLang(lang){
+      const t=dict[lang];
+      allI18n.forEach(el=>el.textContent=t[el.dataset.i18n]);
+      allPh.forEach(el=>el.placeholder=t[el.dataset.ph]);
+      document.title=t.pageTitle; langField.value=lang;
+      localStorage.setItem("lang",lang);
+      btnUZ.classList.toggle("active",lang==="uz"); btnRU.classList.toggle("active",lang==="ru");
+      document.getElementById("successTitle").textContent=t.successTitle;
+      document.getElementById("successDesc").textContent=t.successDesc;
+      document.getElementById("backLink").textContent=t.back;
+    }
+
+    // フォーム送信後に成功画面を表示
+    document.querySelector("form").addEventListener("submit",function(e){
+      e.preventDefault();
+      this.style.display="none";
+      $("#successBox").style.display="block";
+    });
+  </script>
 </body>
 </html>
